@@ -53,6 +53,7 @@ else { return true; }
 }
 
 
+
 // called to create table if needed
 async function createVideoTable() {
   // explicitly declaring the rowIdNum protects rowids from changing if the 
@@ -83,3 +84,45 @@ async function deleteEverythingPrefs () {
 
 // allow code in other server .js files to use the db object
 module.exports = db;
+
+
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////
+  /////////////////TEST CODE//////////////////////
+
+async function allVideoTable() {
+console.log("Printing VideoTable");
+// make the SQL command
+let cmd = " SELECT * FROM VideoTable";
+let result = await db.all(cmd);
+  console.log(result);
+if (result == undefined) { return false;} 
+else { 
+  console.log(result);
+  console.log("size: ", result.length);
+  return true; }
+}
+
+// print VideoTable
+//allVideoTable();
+
+
+async function allPrefTable() {
+console.log("Printing PrefTable");
+// make the SQL command
+let cmd = " SELECT * FROM PrefTable";
+let result = await db.all(cmd);
+  console.log(result);
+if (result == undefined) { return false;} 
+else { 
+  console.log(result);
+  return true; }
+}
+
+// print PrefTable
+//allPrefTable();

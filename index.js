@@ -63,6 +63,39 @@ app.get("/getWinner", async function(req, res) {
 });
 
 
+// "getTwoVideos picks two videos randomly from the database"
+app.get("/getTwoVideos", async function(req, res) {
+  console.log("getting two videos");
+  try {
+// WRITE HERE  
+// 1. call getRandomInt to get two unique random integer 
+    let row1 = getRandomInt(8);
+    let row2 = getRandomInt(8);
+    while(row1==row2){
+      row2 = getRandomInt(8);
+    }
+
+    
+// 2. call the server to get the two entries
+
+// 3. send it back to front end
+
+
+    
+  //let winner = await win.computeWinner(8,false);
+
+  // you'll need to send back a more meaningful response here.
+  res.json({});
+  } catch(err) {
+    res.status(500).send(err);
+  }
+});
+
+
+
+
+
+
 // Page not found
 app.use(function(req, res){
   res.status(404); 
@@ -78,3 +111,28 @@ const listener = app.listen(3000, function () {
   console.log("The static server is listening on port " + listener.address().port);
 });
 
+
+
+/////////////////////////////////////////////////////////////////
+///SQL functions 
+
+async function getVideo(rowID) {
+  try{
+    // warning! You can only use ? to replace table data, not table name or column name.
+    const sql = 'select * from VideoTable where rowIDNum = ?';
+    let result = await db.get(sql, [rowID]);
+    console.log(result==null);
+    return result;
+  }
+  catch(err){
+    
+    console.log(err);
+  }
+}
+
+
+
+getVideo(1);
+
+// print VideoTable
+// allVideoTable();
