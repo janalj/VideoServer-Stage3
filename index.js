@@ -69,23 +69,26 @@ app.get("/getTwoVideos", async function(req, res) {
   try {
 // WRITE HERE  
 // 1. call getRandomInt to get two unique random integer 
-    let row1 = getRandomInt(8);
-    let row2 = getRandomInt(8);
-    while(row1==row2){
-      row2 = getRandomInt(8);
+    let element1 = getRandomInt(8);
+    let element2 = getRandomInt(8);
+    while(element1==element2){
+      element2 = getRandomInt(8);
     }
+    // console.log(element1);
+    // console.log(element2);
 
+    // 2. call the database to get the two entries
+    let item1= await getVideo(element1);
+    let item2 = await getVideo(element2);
+
+    let videoArray = [item1,item2];
     
-// 2. call the server to get the two entries
+    //console.log(videoArray);
 
 // 3. send it back to front end
 
-
+  res.json(videoArray);
     
-  //let winner = await win.computeWinner(8,false);
-
-  // you'll need to send back a more meaningful response here.
-  res.json({});
   } catch(err) {
     res.status(500).send(err);
   }
@@ -116,13 +119,35 @@ const listener = app.listen(3000, function () {
 /////////////////////////////////////////////////////////////////
 ///SQL functions 
 
-async function getVideo(rowID) {
+
+// //Version 1
+// async function getVideo(rowID) {
+//   try{
+//     // warning! You can only use ? to replace table data, not table name or column name.
+//     const sql = 'select * from VideoTable where rowIDNum = ?';
+//     let result = await db.get(sql, [rowID]);
+//     console.log(result==null);
+//     return result;
+//   }
+//   catch(err){
+    
+//     console.log(err);
+//   }
+// }
+
+
+// getVideo(1);
+
+
+// Version 2
+
+async function getVideo(eleNum) {
   try{
     // warning! You can only use ? to replace table data, not table name or column name.
-    const sql = 'select * from VideoTable where rowIDNum = ?';
-    let result = await db.get(sql, [rowID]);
-    console.log(result==null);
-    return result;
+    const sql = 'select * from VideoTable';
+    let result = await db.all(sql);
+    //console.log(result[eleNum]);
+    return result[eleNum];
   }
   catch(err){
     
@@ -130,9 +155,3 @@ async function getVideo(rowID) {
   }
 }
 
-
-
-getVideo(1);
-
-// print VideoTable
-// allVideoTable();

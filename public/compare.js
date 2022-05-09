@@ -21,4 +21,10 @@ for (let i=0; i<2; i++) {
 
 
 
-    
+// need to return 
+sendGetRequest("/getTwoVideos")
+  .then (function(response){
+    console.log("showing response");
+    let result = response;
+    console.log(result);
+  });
