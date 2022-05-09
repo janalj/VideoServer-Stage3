@@ -8,23 +8,18 @@ for (let i=0; i<2; i++) {
   heartButtons[i].classList.add("unloved");
 } // for loop
 
-// hard-code videos for now
-// You will need to get pairs of videos from the server to play the game.
-const urls = ["https://www.tiktok.com/@berdievgabinii/video/7040757252332047662",
-"https://www.tiktok.com/@catcatbiubiubiu/video/6990180291545468166"];
 
-for (let i=0; i<2; i++) {
-      addVideo(urls[i],videoElmts[i]);
+// This get request returns two json objects from the database, then pass their urls to the video tag 
+sendGetRequest("/getTwoVideos")
+  .then (function(response){
+     //let result = response;
+         for (let i=0; i<2; i++) {
+      addVideo(response[i].url,videoElmts[i]);
     }
     // load the videos after the names are pasted in! 
     loadTheVideos();
-
-
-
-// need to return 
-sendGetRequest("/getTwoVideos")
-  .then (function(response){
-    console.log("showing response");
-    let result = response;
-    console.log(result);
-  });
+    
+  })
+  .catch(function(err){
+      console.log("Receive response failed ",err);
+    });
