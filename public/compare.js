@@ -11,6 +11,14 @@ for (let i=0; i<2; i++) {
 // filed heart fas 
 // holo heart far
 
+let PrefData = {
+  "better":"",
+  "worse":""
+};
+
+
+
+
 for (let i = 0; i < 2; i++){
  resetHearts(); heartButtons[i].addEventListener("click", function(){
     // replace the heart to filled 
@@ -19,32 +27,49 @@ for (let i = 0; i < 2; i++){
     if (heartButtons[i].classList.contains("unloved")){
   resetHearts();      heartButtons[i].classList.remove("unloved");
   heartButtons[i].innerHTML='<i class = "fas fa-heart"></i>';
+      //console.log("better:",returnedTwoVideoes[i].rowIdNum);
+      PrefData.better = returnedTwoVideoes[i].rowIdNum;
+      if (i==1){
+        //console.log("worse:",returnedTwoVideoes[0].rowIdNum);
+        PrefData.worse = returnedTwoVideoes[0].rowIdNum;
+      } else{
+        PrefData.worse = returnedTwoVideoes[1].rowIdNum;
+        //console.log("worse:",returnedTwoVideoes[1].rowIdNum);
+      }
+
+
+      console.log("PrefData:\n");
+      console.log(PrefData);
     }
     else{
-      resetHearts(); 
-      heartButtons[i].innerHTML='<i class = "far fa-heart"></i>';
+      resetHearts();  
+      
     }    
     
   });
 }
 
+
+
 function resetHearts(){
   for (let i=0; i<2; i++) {
   heartButtons[i].classList.add("unloved");
-heartButtons[i].innerHTML='<i class = "far fa-heart"></i>';
+  heartButtons[i].innerHTML='<i class = "far fa-heart"></i>';
 } 
 
 }
 
-
+let returnedTwoVideoes = [];
 
 
 // This get request returns two json objects from the database, then pass their urls to the video tag 
 sendGetRequest("/getTwoVideos")
   .then (function(response){
      //let result = response;
-         for (let i=0; i<2; i++) {
-      addVideo(response[i].url,videoElmts[i]);
+      returnedTwoVideoes = response;
+      for (let i=0; i<2; i++) {
+        addVideo(response[i].url,videoElmts[i]);
+      
     }
     // load the videos after the names are pasted in! 
     loadTheVideos();
