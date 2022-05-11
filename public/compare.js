@@ -17,19 +17,21 @@ for (let i = 0; i < 2; i++){
     // remove unloved
     //resetHearts(); 
     if (heartButtons[i].classList.contains("unloved")){
-resetHearts();      heartButtons[i].classList.remove("unloved");
-
+  resetHearts();      heartButtons[i].classList.remove("unloved");
+  heartButtons[i].innerHTML='<i class = "fas fa-heart"></i>';
     }
     else{
-   heartButtons[i].classList.add("unloved");
+      resetHearts(); 
+      heartButtons[i].innerHTML='<i class = "far fa-heart"></i>';
     }    
-
+    
   });
 }
 
 function resetHearts(){
   for (let i=0; i<2; i++) {
   heartButtons[i].classList.add("unloved");
+heartButtons[i].innerHTML='<i class = "far fa-heart"></i>';
 } 
 
 }
