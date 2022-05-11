@@ -89,6 +89,36 @@ app.get("/getTwoVideos", async function(req, res) {
 });
 
 
+
+// NEED TO TEST THIS
+app.post("/insertPref", async function(req, res){
+  console.log("sending Response");
+  // parse the JSON body to Javascript Object type
+  let info = req.body;
+  // create a new object to pass into insertVideo function
+  let vidObj = {
+    "better": info.better ,
+    "worse": info.worse  
+  }
+  
+  // let result = await dumpTable();
+  // if(result.length < 8){
+  //   await updateFlag();
+  //   await insertVideo(vidObj);
+  //   res.send("Got Video");
+  // }
+  // else{
+  //   res.send("database full");
+  //   console.log("Database is full");
+  // }
+})
+
+
+
+
+
+
+
 // Page not found
 app.use(function(req, res){
   res.status(404); 
@@ -109,7 +139,6 @@ const listener = app.listen(3000, function () {
 /////////////////////////////////////////////////////////////////
 ///SQL functions 
 
-// Version 2
 
 async function getVideo(eleNum) {
   try{
@@ -123,3 +152,16 @@ async function getVideo(eleNum) {
   }
 }
 
+
+// insert entries to PrefTable
+// NEED TO TEST THIS
+async function insertVideo(v) {
+  try{
+    const sql = "insert into PrefTable (better,worse) values (?,?)";
+
+    await db.run(sql,[v.better, v.worse]);
+  }
+  catch(err){
+    console.log(err);
+  }
+}

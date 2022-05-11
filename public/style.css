@@ -6,6 +6,10 @@
   --cyan : rgb(105, 201, 208);
 }
 
+
+
+
+
 body {
     display: flex;
     flex-direction: column;

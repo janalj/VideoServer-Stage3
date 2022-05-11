@@ -8,6 +8,34 @@ for (let i=0; i<2; i++) {
   heartButtons[i].classList.add("unloved");
 } // for loop
 
+// filed heart fas 
+// holo heart far
+
+for (let i = 0; i < 2; i++){
+ resetHearts(); heartButtons[i].addEventListener("click", function(){
+    // replace the heart to filled 
+    // remove unloved
+    //resetHearts(); 
+    if (heartButtons[i].classList.contains("unloved")){
+resetHearts();      heartButtons[i].classList.remove("unloved");
+
+    }
+    else{
+   heartButtons[i].classList.add("unloved");
+    }    
+
+  });
+}
+
+function resetHearts(){
+  for (let i=0; i<2; i++) {
+  heartButtons[i].classList.add("unloved");
+} 
+
+}
+
+
+
 
 // This get request returns two json objects from the database, then pass their urls to the video tag 
 sendGetRequest("/getTwoVideos")
