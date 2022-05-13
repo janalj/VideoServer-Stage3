@@ -1,3 +1,6 @@
+//send get request"/getWinner"
+
+
 // when this page is opened, get the most recently added video and show it.
 // function is defined in video.js
 let divElmt = document.getElementById("tiktokDiv");

@@ -66,6 +66,12 @@ let returnedTwoVideoes = [];
 // This get request returns two json objects from the database, then pass their urls to the video tag 
 sendGetRequest("/getTwoVideos")
   .then (function(response){
+
+     if(response == 'pick winner'){
+       // pick the winner first, possibly asyn function
+       window.location = "winner.html";
+     }
+    
      //let result = response;
       returnedTwoVideoes = response;
       for (let i=0; i<2; i++) {
@@ -82,9 +88,27 @@ sendGetRequest("/getTwoVideos")
 
 
 
-let testPrefData = {
-  "better":6,
-  "worse":8
-};
-
 //sendPostRequest("/insertPref",testPrefData);
+
+
+
+// Next button 
+
+// by default, next button is disable  set .disable in js 
+// once user click on the heart, next button enable
+// sends the prefData to PrefTable
+
+
+
+let nextButton = document.getElementById("nextButton");
+nextButton.addEventListener("click", function(){
+  
+  try{
+    // reloading page 
+    window.location.reload();
+  }
+  catch(error){
+    console.log("Next error ",error)
+  }
+  
+});

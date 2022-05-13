@@ -1,3 +1,14 @@
+//LEFT TO DO
+
+// enable disable next button
+//send get request"/getWinner" in winner.js
+// modify /getWinner function
+// set up a function returns the size of the prefTable
+// finish /insertPref
+
+
+
+
 'use strict'
 // index.js
 // This is our main server file
@@ -104,12 +115,14 @@ app.post("/insertPref", async function(req, res){
     //console.log(vidObj);
     await insertVideo(vidObj);
     
+    // need to set a sql function to get the table size
+    // if the size is 15, sends "pick winner"
     
   } catch(err) {
     res.send(err);
 
-  //   await insertVideo(vidObj);
-  //   res.send("continue");
+ 
+  
   }
 
 });
@@ -168,11 +181,6 @@ async function insertVideo(v) {
   }
 }
 
-
-let PrefData = {
-  "better":1,
-  "worse":2
-};
 
 async function checkPrefTable(){
     //await allPrefTable();
