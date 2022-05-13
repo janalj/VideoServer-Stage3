@@ -38,7 +38,8 @@ async function initTables () {
     await createPrefTable();
   } else {
     // clean out any old data
-    await deleteEverythingPrefs();
+    // initialize table deletes everything on the Prefs Table
+    //await deleteEverythingPrefs();
   }
 }
 
@@ -117,12 +118,11 @@ console.log("Printing PrefTable");
 // make the SQL command
 let cmd = " SELECT * FROM PrefTable";
 let result = await db.all(cmd);
-  console.log(result);
-if (result == undefined) { return false;} 
+  if (result == undefined) { return false;} 
 else { 
-  console.log(result);
+  console.log("Print PrefTable: \n",result);
   return true; }
 }
 
 // print PrefTable
-//allPrefTable();
+allPrefTable();

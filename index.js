@@ -92,26 +92,27 @@ app.get("/getTwoVideos", async function(req, res) {
 
 // NEED TO TEST THIS
 app.post("/insertPref", async function(req, res){
-  console.log("sending Response");
-  // parse the JSON body to Javascript Object type
-  let info = req.body;
-  // create a new object to pass into insertVideo function
-  let vidObj = {
-    "better": info.better ,
-    "worse": info.worse  
-  }
-  
-  // let result = await dumpTable();
-  // if(result.length < 8){
-  //   await updateFlag();
+  console.log("got the /insertPref post\n");
+  try{
+        // parse the JSON body to Javascript Object type
+    let info = req.body;
+    // create a new object to pass into insertVideo function
+    let vidObj = {
+      "better": info.better ,
+      "worse": info.worse  
+    }
+    //console.log(vidObj);
+    await insertVideo(vidObj);
+    
+    
+  } catch(err) {
+    res.send(err);
+
   //   await insertVideo(vidObj);
-  //   res.send("Got Video");
-  // }
-  // else{
-  //   res.send("database full");
-  //   console.log("Database is full");
-  // }
-})
+  //   res.send("continue");
+  }
+
+});
 
 
 
@@ -160,8 +161,25 @@ async function insertVideo(v) {
     const sql = "insert into PrefTable (better,worse) values (?,?)";
 
     await db.run(sql,[v.better, v.worse]);
+    console.log("inserting", v);
   }
   catch(err){
     console.log(err);
   }
 }
+
+
+let PrefData = {
+  "better":1,
+  "worse":2
+};
+
+async function checkPrefTable(){
+    //await allPrefTable();
+  let cmd = " SELECT * FROM PrefTable";
+  let result = await db.all(cmd);
+  console.log(result);
+  
+}
+
+//checkPrefTable();

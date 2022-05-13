@@ -38,8 +38,9 @@ for (let i = 0; i < 2; i++){
       }
 
 
-      console.log("PrefData:\n");
-      console.log(PrefData);
+      // console.log("PrefData:\n");
+      // console.log(PrefData);
+      
     }
     else{
       resetHearts();  
@@ -78,3 +79,12 @@ sendGetRequest("/getTwoVideos")
   .catch(function(err){
       console.log("Receive response failed ",err);
     });
+
+
+
+let testPrefData = {
+  "better":6,
+  "worse":8
+};
+
+//sendPostRequest("/insertPref",testPrefData);
