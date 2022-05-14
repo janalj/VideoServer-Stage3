@@ -120,10 +120,12 @@ nextButton.addEventListener("click", function() {
     sendPostRequest("/insertPref",PrefData)
       .then(function(response){
         if (response == "pick winner") {
+          window.location = "winner.html"; 
           console.log(response)
         }else {
-          //window.location.reload();
-          console.log(response)
+          console.log(response);
+          window.location.reload();
+          
         }
       })
       .catch(function(err) {
