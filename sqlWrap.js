@@ -113,16 +113,4 @@ else {
 //allVideoTable();
 
 
-async function allPrefTable() {
-console.log("Printing PrefTable");
-// make the SQL command
-let cmd = " SELECT * FROM PrefTable";
-let result = await db.all(cmd);
-  if (result == undefined) { return false;} 
-else { 
-  console.log("Print PrefTable: \n",result);
-  return true; }
-}
 
-// print PrefTable
-allPrefTable();

@@ -111,11 +111,26 @@ sendGetRequest("/getTwoVideos")
 
 
 let nextButton = document.getElementById("nextButton");
+
+
 nextButton.addEventListener("click", function() {
 
   try {
     // reloading page 
-    window.location.reload();
+    sendPostRequest("/insertPref",PrefData)
+      .then(function(response){
+        if (response == "pick winner") {
+          console.log(response)
+        }else {
+          //window.location.reload();
+          console.log(response)
+        }
+      })
+      .catch(function(err) {
+    console.log("Receive response failed ", err);
+  });
+    
+    
   }
   catch (error) {
     console.log("Next error ", error)
