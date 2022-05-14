@@ -18,7 +18,7 @@ reloadButton.addEventListener("click",function () {
 // GET request to /getWinner,
 // and send the result back in the HTTP response.
 
-showWinningVideo()
+// showWinningVideo()
 
 function showWinningVideo() {
   
@@ -26,3 +26,9 @@ function showWinningVideo() {
   addVideo(winningUrl, divElmt);
   loadTheVideos();
 }
+
+sendGetRequest("/getWinner").then(
+  function(response){
+    console.log(response);
+  }
+);

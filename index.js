@@ -1,12 +1,7 @@
 //LEFT TO DO
-
-
-//send get request"/getWinner" in winner.js
-// modify /getWinner function
-// set up a function returns the size of the prefTable
-// finish /insertPref
-
-
+// On the server, modify /getWinner get request, send back the video link to browser 
+// on the pickWinner.js
+// 
 
 
 'use strict'
@@ -51,7 +46,7 @@ app.use(express.static("public"));
 
 // if no file specified, return the main page
 app.get("/", (request, response) => {
-  response.sendFile(__dirname + "/public/compare.html");
+  response.sendFile(__dirname + "/public/winner.html");
 });
 
 // Get JSON out of HTTP request body, JSON.parse, and put object into req.body
@@ -65,7 +60,7 @@ app.get("/getWinner", async function(req, res) {
     // with parameter="false", it uses fake preferences data and gets a random result.
     // winner should contain the rowId of the winning video.
     let winner = await win.computeWinner(8, false);
-
+    console.log("On Server: " ,winner);
     // you'll need to send back a more meaningful response here.
     res.json({});
   } catch (err) {
@@ -116,16 +111,16 @@ app.post("/insertPref", async function(req, res) {
 
     let checkTable = await allPrefTable();
     let tableSize = checkTable.length;
-    console.log("tableSize ",tableSize);
+    console.log("tableSize ", tableSize);
 
-    if (tableSize==15){
+    if (tableSize == 15) {
       res.send("pick winner");
-    } else{
+    } else {
       //console.log(vidObj);
       await insertVideo(vidObj);
       res.send("conitune");
     }
-    
+
     // need to set a sql function to get the table size
     // if the size is 15, sends "pick winner"
 

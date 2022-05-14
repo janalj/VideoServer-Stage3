@@ -14,6 +14,7 @@ module.exports = {
 
 // use Pagerank module, wrap in Promise
 let Pagerank = require('pagerank-js');
+const { abort } = require('process');
 const util = require('util');
 Pagerank = util.promisify(Pagerank);
 
@@ -22,75 +23,77 @@ const db = require('./sqlWrap');
 
 
 // n is number of videos
-async function computeWinner(n,testing){
+async function computeWinner(n, testing) {
   // get list of videoTable rowIdNums
   let keyList = await getKeyList();
-  
+
   // will contain preference data
   let prefs = [];
 
   // use fake data if no real data is available, for testing
   if (testing) {
     console.log("making fake preference data for testing");
-    prefs = await makeUpFakePreferences(n,2*n,keyList);
+    prefs = await makeUpFakePreferences(n, 2 * n, keyList);
+    console.log(prefs);
+
   }
-    
+
   // we have real data!
   else {
     prefs = await getAllPrefs();
+    console.log(prefs);
   }
 
+  // translate into input format that pagerank code wants
+  let nodes = makeDirectedGraph(prefs, n, keyList);
+  // standard values; might need to change?
+  let linkProb = 0.85 // high numbers are more stable
+  let tolerance = 0.0001 // accuracy of convergence. 
 
-// translate into input format that pagerank code wants
-let nodes = makeDirectedGraph(prefs,n,keyList);
+  // run pagerank code
+  let results = await Pagerank(nodes, linkProb, tolerance);
+  // console.log("Pagerank results",results);
+  // get index of max element
+  let i = results.indexOf(Math.max(...results));
 
-// standard values; might need to change?
-let linkProb = 0.85 // high numbers are more stable
-let tolerance = 0.0001 // accuracy of convergence. 
-
-// run pagerank code
-let results = await Pagerank(nodes, linkProb, tolerance);
-// console.log("Pagerank results",results);
-// get index of max element
-let i = results.indexOf(Math.max(...results));
-
-console.log("winner",i,"rowIdNum",keyList[i]);
-// translate result back to rowId numbers
-return keyList[i];
+  console.log("winner", i, "rowIdNum", keyList[i]);
+  // translate result back to rowId numbers
+  return keyList[i];
 }
 
 
-function makeDirectedGraph(prefs,n,keyList) {
+function makeDirectedGraph(prefs, n, keyList) {
 
-// put all the preferences into a dictionary where keys are video indices
+  // put all the preferences into a dictionary where keys are video indices
   // and values are all better ones
   let graph = {};
 
-  for (let i=0; i<keyList.length; i++) {
+  for (let i = 0; i < keyList.length; i++) {
     graph[keyList[i]] = [];
   }
 
-  for (let i=0; i<prefs.length; i++) {
+
+  for (let i = 0; i < prefs.length; i++) {
     let b = prefs[i].better;
     let w = prefs[i].worse;
-    graph[w].push(b);
+    if (graph[w]) 
+    { graph[w].push(b);}
   }
+
 
   // rename keys so they form a list from 0 to n, where n=number of videos
   let translate = {};
-  for (let i=0; i<keyList.length; i++) {
+  for (let i = 0; i < keyList.length; i++) {
     translate[keyList[i]] = i;
   }
-  
 
   // output adjacencey list, where the new name of a node is it's index in the adjacency list
   const adjList = [];
-  for (let i=0; i<keyList.length; i++) {
+  for (let i = 0; i < keyList.length; i++) {
     let key = keyList[i];
     let outgoing = graph[key];
     // translate names of nodes in outgoing edges
-
-    let newoutgoing = outgoing.map(function (x) {
+    let newoutgoing = outgoing.map(function(x) {
       return translate[x];
     });
     adjList.push(newoutgoing);
@@ -100,11 +103,11 @@ function makeDirectedGraph(prefs,n,keyList) {
 
 // make up fake preferences data for testing
 // n is number of videos, p is number of preferences to try to invent
-async function makeUpFakePreferences (n,p,keyList) {
-  
-  
+async function makeUpFakePreferences(n, p, keyList) {
+
+
   let prefs = []; // will be array of objects
-  for (let i=0; i<p; i++) {
+  for (let i = 0; i < p; i++) {
     let a = keyList[getRandomInt(n)];
     let b = keyList[getRandomInt(n)];
     if (a != b) {
@@ -130,11 +133,11 @@ function getRandomInt(max) {
 
 /* database operations */
 
-async function getKeyList () {
+async function getKeyList() {
   let cmd = "SELECT rowIdNum FROM VideoTable;"
   let keyObjList = await db.all(cmd);
   let keyList = [];
-  for (let i=0; i<keyObjList.length; i++)   {
+  for (let i = 0; i < keyObjList.length; i++) {
     keyList.push(keyObjList[i].rowIdNum);
   }
   return keyList;
@@ -143,11 +146,11 @@ async function getKeyList () {
 // gets preferences out of preference table
 async function getAllPrefs() {
   const dumpCmd = "SELECT * from PrefTable";
-  
+
   try {
     let prefs = await db.all(dumpCmd);
     return prefs;
-  } catch(err) {
+  } catch (err) {
     console.log("pref dump error", err);
   }
 }
@@ -155,11 +158,11 @@ async function getAllPrefs() {
 // gets preferences out of preference table
 async function getAllVideos() {
   const dumpCmd = "SELECT * from VideoTable";
-  
+
   try {
     let videos = await db.all(dumpCmd);
     return videos;
-  } catch(err) {
+  } catch (err) {
     console.log("video dump error", err);
   }
 }
@@ -167,14 +170,14 @@ async function getAllVideos() {
 
 
 // inserts a preference into the database
-async function insertPreference(i,j) {
+async function insertPreference(i, j) {
 
   // SQL command we'll need
-const insertCmd = "INSERT INTO PrefTable (better,worse) values (?, ?)";
-  
-   try {
-    await db.run(insertCmd, [i,j]);
-  } catch(error) {
+  const insertCmd = "INSERT INTO PrefTable (better,worse) values (?, ?)";
+
+  try {
+    await db.run(insertCmd, [i, j]);
+  } catch (error) {
     console.log("pref insert error", error);
   }
 }
