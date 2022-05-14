@@ -114,3 +114,29 @@ else {
 
 
 
+// async function getVideoByRowID(rowID) {
+//   try {
+//     const sql = 'select url from VideoTable where rowIdNum = 2';
+//     let result = await db.all(sql);
+//     return result;
+//   }
+//   catch (err) {
+
+//     console.log(err);
+//   }
+// }
+
+async function getUrlByRowID(num) {
+  try{
+    // warning! You can only use ? to replace table data, not table name or column name.
+    const sql = 'select url from VideoTable where rowIdNum = ?';
+  
+    let result = await db.get(sql, [num]);
+    console.log(result);
+    return result;
+    
+  }
+  catch(err){
+    console.log(err);
+  }
+}

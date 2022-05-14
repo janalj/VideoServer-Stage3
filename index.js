@@ -1,8 +1,6 @@
 //LEFT TO DO
 // On the server, modify /getWinner get request, send back the video link to browser 
 // on the pickWinner.js
-// 
-
 
 'use strict'
 // index.js
@@ -173,6 +171,8 @@ async function getVideo(eleNum) {
 }
 
 
+
+
 // insert entries to PrefTable
 // NEED TO TEST THIS
 async function insertVideo(v) {
@@ -191,7 +191,7 @@ async function insertVideo(v) {
 
 // // print PrefTable
 // console.log("From sqlWrap.js call");
-// allPrefTable();
+ allPrefTable();
 
 // allPrefTable returns the entire table on sucess
 async function allPrefTable() {
