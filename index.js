@@ -58,9 +58,9 @@ app.get("/getWinner", async function(req, res) {
     // with parameter="false", it uses fake preferences data and gets a random result.
     // winner should contain the rowId of the winning video.
     let winner = await win.computeWinner(8, false);
-    console.log("On Server: " ,winner);
+    let winnerObject = await getUrlByRowID(winner);
     // you'll need to send back a more meaningful response here.
-    res.json({});
+    res.json(winnerObject);
   } catch (err) {
     res.status(500).send(err);
   }
@@ -204,6 +204,22 @@ async function allPrefTable() {
     return result;
   }
   catch (err) {
+    console.log(err);
+  }
+}
+
+
+async function getUrlByRowID(num) {
+  try{
+    
+    const sql = 'select url from VideoTable where rowIdNum = ?';
+  
+    let result = await db.get(sql, [num]);
+    console.log(result);
+    return result;
+    
+  }
+  catch(err){
     console.log(err);
   }
 }

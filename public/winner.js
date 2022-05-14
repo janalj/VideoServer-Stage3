@@ -20,15 +20,14 @@ reloadButton.addEventListener("click",function () {
 
 // showWinningVideo()
 
-function showWinningVideo() {
-  
-  let winningUrl = "https://www.tiktok.com/@catcatbiubiubiu/video/6990180291545468166";
-  addVideo(winningUrl, divElmt);
-  loadTheVideos();
-}
 
-sendGetRequest("/getWinner").then(
+sendGetRequest("/getWinner")
+  .then(
   function(response){
-    console.log(response);
-  }
-);
+    addVideo(response.url, divElmt);
+    loadTheVideos();
+    
+  })
+   .catch(function(err) {
+    console.log("SendGetRequest /getWinner error ", err);
+  });
