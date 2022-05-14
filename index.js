@@ -1,6 +1,9 @@
 //LEFT TO DO
-// On the server, modify /getWinner get request, send back the video link to browser 
-// on the pickWinner.js
+
+// test 
+// check syntax , optimize 
+// change the button one heart can't cancel once picked
+// try to remove inner.html
 
 'use strict'
 // index.js
@@ -13,11 +16,9 @@ const express = require("express");
 const db = require("./sqlWrap");
 const win = require("./pickWinner");
 
-
 // gets data out of HTTP request body 
 // and attaches it to the request object
 const bodyParser = require('body-parser');
-
 
 /* might be a useful function when picking random videos */
 function getRandomInt(max) {
@@ -26,11 +27,9 @@ function getRandomInt(max) {
   return n;
 }
 
-
 /* start of code run on start-up */
 // create object to interface with express
 const app = express();
-
 // Code in this section sets up an express pipeline
 // print info about incoming HTTP request 
 
@@ -44,12 +43,11 @@ app.use(express.static("public"));
 
 // if no file specified, return the main page
 app.get("/", (request, response) => {
-  response.sendFile(__dirname + "/public/winner.html");
+  response.sendFile(__dirname + "/public/compare.html");
 });
 
 // Get JSON out of HTTP request body, JSON.parse, and put object into req.body
 app.use(bodyParser.json());
-
 
 app.get("/getWinner", async function(req, res) {
   console.log("getting winner");
@@ -65,7 +63,6 @@ app.get("/getWinner", async function(req, res) {
     res.status(500).send(err);
   }
 });
-
 
 // "getTwoVideos picks two videos randomly from the database"
 app.get("/getTwoVideos", async function(req, res) {
@@ -92,9 +89,6 @@ app.get("/getTwoVideos", async function(req, res) {
   }
 });
 
-
-
-// NEED TO TEST THIS
 app.post("/insertPref", async function(req, res) {
   console.log("got the /insertPref post\n");
   try {
@@ -118,24 +112,9 @@ app.post("/insertPref", async function(req, res) {
       await insertVideo(vidObj);
       res.send("conitune");
     }
-
-    // need to set a sql function to get the table size
-    // if the size is 15, sends "pick winner"
-
   } catch (err) {
-    res.send(err);
-
-
-
-  }
-
+    res.send(err);}
 });
-
-
-
-
-
-
 
 // Page not found
 app.use(function(req, res) {
@@ -145,19 +124,14 @@ app.use(function(req, res) {
 });
 
 // end of pipeline specification
-
 // Now listen for HTTP requests
 // it's an event listener on the server!
 const listener = app.listen(3000, function() {
   console.log("The static server is listening on port " + listener.address().port);
 });
 
-
-
 /////////////////////////////////////////////////////////////////
-///SQL functions 
-
-
+//SQL functions 
 async function getVideo(eleNum) {
   try {
     const sql = 'select * from VideoTable';
@@ -165,20 +139,13 @@ async function getVideo(eleNum) {
     return result[eleNum];
   }
   catch (err) {
-
     console.log(err);
   }
 }
 
-
-
-
-// insert entries to PrefTable
-// NEED TO TEST THIS
 async function insertVideo(v) {
   try {
     const sql = "insert into PrefTable (better,worse) values (?,?)";
-
     await db.run(sql, [v.better, v.worse]);
     console.log("inserting", v);
   }
@@ -187,11 +154,9 @@ async function insertVideo(v) {
   }
 }
 
-
-
 // // print PrefTable
 // console.log("From sqlWrap.js call");
- allPrefTable();
+allPrefTable();
 
 // allPrefTable returns the entire table on sucess
 async function allPrefTable() {
@@ -210,16 +175,13 @@ async function allPrefTable() {
 
 
 async function getUrlByRowID(num) {
-  try{
-    
+  try {
     const sql = 'select url from VideoTable where rowIdNum = ?';
-  
     let result = await db.get(sql, [num]);
     console.log(result);
     return result;
-    
   }
-  catch(err){
+  catch (err) {
     console.log(err);
   }
 }

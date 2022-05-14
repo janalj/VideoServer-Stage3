@@ -12,21 +12,16 @@ reloadButton.addEventListener("click",function () {
 });
 
 
-
 // always shows the same hard-coded video.  You'll need to get the server to 
 // compute the winner, by sending a 
 // GET request to /getWinner,
 // and send the result back in the HTTP response.
 
-// showWinningVideo()
-
-
 sendGetRequest("/getWinner")
   .then(
   function(response){
     addVideo(response.url, divElmt);
-    loadTheVideos();
-    
+    loadTheVideos();    
   })
    .catch(function(err) {
     console.log("SendGetRequest /getWinner error ", err);

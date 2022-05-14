@@ -76,8 +76,8 @@ function makeDirectedGraph(prefs, n, keyList) {
   for (let i = 0; i < prefs.length; i++) {
     let b = prefs[i].better;
     let w = prefs[i].worse;
-    if (graph[w]) 
-    { graph[w].push(b);}
+
+    graph[w].push(b);
   }
 
 
