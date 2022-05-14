@@ -2,9 +2,9 @@ let videoElmts = document.getElementsByClassName("tiktokDiv");
 
 let reloadButtons = document.getElementsByClassName("reload");
 let heartButtons = document.querySelectorAll("div.heart");
-for (let i=0; i<2; i++) {
-  let reload = reloadButtons[i]; 
-  reload.addEventListener("click",function() { reloadVideo(videoElmts[i]) });
+for (let i = 0; i < 2; i++) {
+  let reload = reloadButtons[i];
+  reload.addEventListener("click", function() { reloadVideo(videoElmts[i]) });
   heartButtons[i].classList.add("unloved");
 } // for loop
 
@@ -12,27 +12,36 @@ for (let i=0; i<2; i++) {
 // holo heart far
 
 let PrefData = {
-  "better":"",
-  "worse":""
+  "better": "",
+  "worse": ""
 };
 
+// Disable the next button by default
+let nextButtonID = document.getElementById("nextButton");
+nextButtonID.disabled = true;
 
 
-
-for (let i = 0; i < 2; i++){
- resetHearts(); heartButtons[i].addEventListener("click", function(){
+for (let i = 0; i < 2; i++) {
+  resetHearts(); heartButtons[i].addEventListener("click", function() {
     // replace the heart to filled 
     // remove unloved
     //resetHearts(); 
-    if (heartButtons[i].classList.contains("unloved")){
-  resetHearts();      heartButtons[i].classList.remove("unloved");
-  heartButtons[i].innerHTML='<i class = "fas fa-heart"></i>';
+    if (heartButtons[i].classList.contains("unloved")) {
+      resetHearts();
+      heartButtons[i].classList.remove("unloved");
+      heartButtons[i].innerHTML = '<i class = "fas fa-heart"></i>';
       //console.log("better:",returnedTwoVideoes[i].rowIdNum);
       PrefData.better = returnedTwoVideoes[i].rowIdNum;
-      if (i==1){
+      // enable the next button 
+      nextButtonID.removeAttribute("disabled");
+      // set the css to enable button
+      nextButtonID.classList.remove("disabledButton");
+      nextButtonID.classList.add("enabledButton");
+      
+      if (i == 1) {
         //console.log("worse:",returnedTwoVideoes[0].rowIdNum);
         PrefData.worse = returnedTwoVideoes[0].rowIdNum;
-      } else{
+      } else {
         PrefData.worse = returnedTwoVideoes[1].rowIdNum;
         //console.log("worse:",returnedTwoVideoes[1].rowIdNum);
       }
@@ -40,23 +49,23 @@ for (let i = 0; i < 2; i++){
 
       // console.log("PrefData:\n");
       // console.log(PrefData);
-      
+
     }
-    else{
-      resetHearts();  
-      
-    }    
-    
+    else {
+      resetHearts();
+
+    }
+
   });
 }
 
 
 
-function resetHearts(){
-  for (let i=0; i<2; i++) {
-  heartButtons[i].classList.add("unloved");
-  heartButtons[i].innerHTML='<i class = "far fa-heart"></i>';
-} 
+function resetHearts() {
+  for (let i = 0; i < 2; i++) {
+    heartButtons[i].classList.add("unloved");
+    heartButtons[i].innerHTML = '<i class = "far fa-heart"></i>';
+  }
 
 }
 
@@ -65,26 +74,26 @@ let returnedTwoVideoes = [];
 
 // This get request returns two json objects from the database, then pass their urls to the video tag 
 sendGetRequest("/getTwoVideos")
-  .then (function(response){
+  .then(function(response) {
 
-     if(response == 'pick winner'){
-       // pick the winner first, possibly asyn function
-       window.location = "winner.html";
-     }
-    
-     //let result = response;
-      returnedTwoVideoes = response;
-      for (let i=0; i<2; i++) {
-        addVideo(response[i].url,videoElmts[i]);
-      
+    if (response == 'pick winner') {
+      // pick the winner first, possibly asyn function
+      window.location = "winner.html";
+    }
+
+    //let result = response;
+    returnedTwoVideoes = response;
+    for (let i = 0; i < 2; i++) {
+      addVideo(response[i].url, videoElmts[i]);
+
     }
     // load the videos after the names are pasted in! 
     loadTheVideos();
-    
+
   })
-  .catch(function(err){
-      console.log("Receive response failed ",err);
-    });
+  .catch(function(err) {
+    console.log("Receive response failed ", err);
+  });
 
 
 
@@ -100,15 +109,16 @@ sendGetRequest("/getTwoVideos")
 
 
 
+
 let nextButton = document.getElementById("nextButton");
-nextButton.addEventListener("click", function(){
-  
-  try{
+nextButton.addEventListener("click", function() {
+
+  try {
     // reloading page 
     window.location.reload();
   }
-  catch(error){
-    console.log("Next error ",error)
+  catch (error) {
+    console.log("Next error ", error)
   }
-  
+
 });

@@ -39,8 +39,8 @@ function getRandomInt(max) {
 const app = express();
 
 // Code in this section sets up an express pipeline
-
 // print info about incoming HTTP request 
+
 // for debugging
 app.use(function(req, res, next) {
   console.log(req.method,req.url);
