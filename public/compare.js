@@ -20,19 +20,17 @@ let PrefData = {
 let nextButtonID = document.getElementById("nextButton");
 nextButtonID.disabled = true;
 
+let iconClass = document.getElementsByClassName("icon");
 
 for (let i = 0; i < 2; i++) {
   resetHearts(); heartButtons[i].addEventListener("click", function() {
-    // replace the heart to filled 
-    // remove unloved
-    if (heartButtons[i].classList.contains("unloved")) {
       resetHearts();
       heartButtons[i].classList.remove("unloved");
-      heartButtons[i].innerHTML = '<i class = "fas fa-heart"></i>';
+      iconClass[i].classList.remove("far");
+      iconClass[i].classList.add("fas");
       PrefData.better = returnedTwoVideoes[i].rowIdNum;
-      // enable the next button 
+      // diable the next button 
       nextButtonID.removeAttribute("disabled");
-      // set the css to enable button
       nextButtonID.classList.remove("disabledButton");
       nextButtonID.classList.add("enabledButton");
 
@@ -42,18 +40,13 @@ for (let i = 0; i < 2; i++) {
         PrefData.worse = returnedTwoVideoes[1].rowIdNum;
       }
 
-    }
-    else {
-      resetHearts();
-    }
-
   });
 }
 
 function resetHearts() {
   for (let i = 0; i < 2; i++) {
     heartButtons[i].classList.add("unloved");
-    heartButtons[i].innerHTML = '<i class = "far fa-heart"></i>';
+    iconClass[i].classList.add("far");
   }
 }
 

@@ -2,8 +2,6 @@
 
 // test 
 // check syntax , optimize 
-// change the button one heart can't cancel once picked
-// try to remove inner.html
 
 'use strict'
 // index.js
