@@ -41,7 +41,7 @@ app.use(express.static("public"));
 
 // if no file specified, return the main page
 app.get("/", (request, response) => {
-  response.sendFile(__dirname + "/public/compare.html");
+  response.sendFile(__dirname + "/public/winner.html");
 });
 
 // Get JSON out of HTTP request body, JSON.parse, and put object into req.body
@@ -55,7 +55,7 @@ app.get("/getWinner", async function(req, res) {
     // winner should contain the rowId of the winning video.
     let winner = await win.computeWinner(8, false);
     let winnerObject = await getUrlByRowID(winner);
-    // you'll need to send back a more meaningful response here.
+    // send back the computed winner video object
     res.json(winnerObject);
   } catch (err) {
     res.status(500).send(err);
@@ -159,7 +159,7 @@ async function insertVideo(v) {
 }
 
 // // print PrefTable
-allPrefTable();
+//allPrefTable();
 
 // allPrefTable returns the entire table on sucess
 async function allPrefTable() {
@@ -181,7 +181,6 @@ async function getUrlByRowID(num) {
   try {
     const sql = 'select * from VideoTable where rowIdNum = ?';
     let result = await db.get(sql, [num]);
-    console.log(result);
     return result;
   }
   catch (err) {

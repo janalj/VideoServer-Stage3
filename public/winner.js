@@ -19,6 +19,11 @@ sendGetRequest("/getWinner")
   .then(
     // on sucess, show the returned winner video
   function(response){
+    // add video nickname to the winner statement
+    let winnerClass = document.getElementById("winnerTitle");
+    let winnerStatement = "The winner is " +response.nickname + ". Game Over!";
+    winnerClass.textContent = winnerStatement;
+    // pass the url to load the winner video 
     addVideo(response.url, divElmt);
     loadTheVideos();    
   })
