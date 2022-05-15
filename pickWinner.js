@@ -34,14 +34,14 @@ async function computeWinner(n, testing) {
   if (testing) {
     console.log("making fake preference data for testing");
     prefs = await makeUpFakePreferences(n, 2 * n, keyList);
-    console.log(prefs);
+    //console.log(prefs);
 
   }
 
   // we have real data!
   else {
     prefs = await getAllPrefs();
-    console.log(prefs);
+    //console.log(prefs);
   }
 
   // translate into input format that pagerank code wants

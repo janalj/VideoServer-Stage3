@@ -41,7 +41,7 @@ app.use(express.static("public"));
 
 // if no file specified, return the main page
 app.get("/", (request, response) => {
-  response.sendFile(__dirname + "/public/winner.html");
+  response.sendFile(__dirname + "/public/compare.html");
 });
 
 // Get JSON out of HTTP request body, JSON.parse, and put object into req.body
@@ -151,7 +151,7 @@ async function insertVideo(v) {
   try {
     const sql = "insert into PrefTable (better,worse) values (?,?)";
     await db.run(sql, [v.better, v.worse]);
-    console.log("inserting", v);
+    console.log("Inserting to the Database Now");
   }
   catch (err) {
     console.log(err);
@@ -164,11 +164,10 @@ async function insertVideo(v) {
 // allPrefTable returns the entire table on sucess
 async function allPrefTable() {
   try {
-    console.log("Printing PrefTable");
     // make the SQL command
     let cmd = " SELECT * FROM PrefTable";
     let result = await db.all(cmd);
-    console.log("Print PrefTable: \n", result);
+    //console.log("Print PrefTable: \n", result);
     return result;
   }
   catch (err) {
