@@ -1,6 +1,3 @@
-//send get request"/getWinner"
-
-
 // when this page is opened, get the most recently added video and show it.
 // function is defined in video.js
 let divElmt = document.getElementById("tiktokDiv");
@@ -17,8 +14,10 @@ reloadButton.addEventListener("click",function () {
 // GET request to /getWinner,
 // and send the result back in the HTTP response.
 
+// once winner.html page gets loaded, send the '/getWinner' get request
 sendGetRequest("/getWinner")
   .then(
+    // on sucess, show the returned winner video
   function(response){
     addVideo(response.url, divElmt);
     loadTheVideos();    

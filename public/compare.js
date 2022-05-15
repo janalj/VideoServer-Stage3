@@ -24,21 +24,23 @@ let iconClass = document.getElementsByClassName("icon");
 
 for (let i = 0; i < 2; i++) {
   resetHearts(); heartButtons[i].addEventListener("click", function() {
-      resetHearts();
-      heartButtons[i].classList.remove("unloved");
-      iconClass[i].classList.remove("far");
-      iconClass[i].classList.add("fas");
-      PrefData.better = returnedTwoVideoes[i].rowIdNum;
-      // diable the next button 
-      nextButtonID.removeAttribute("disabled");
-      nextButtonID.classList.remove("disabledButton");
-      nextButtonID.classList.add("enabledButton");
-
-      if (i == 1) {
-        PrefData.worse = returnedTwoVideoes[0].rowIdNum;
-      } else {
-        PrefData.worse = returnedTwoVideoes[1].rowIdNum;
-      }
+    resetHearts();
+    // change heart to solic megenta 
+    heartButtons[i].classList.remove("unloved");
+    iconClass[i].classList.remove("far");
+    iconClass[i].classList.add("fas");
+    // set better video
+    PrefData.better = returnedTwoVideoes[i].rowIdNum;
+    // enble the next button 
+    nextButtonID.removeAttribute("disabled");
+    nextButtonID.classList.remove("disabledButton");
+    nextButtonID.classList.add("enabledButton");
+    // set worse video
+    if (i == 1) {
+      PrefData.worse = returnedTwoVideoes[0].rowIdNum;
+    } else {
+      PrefData.worse = returnedTwoVideoes[1].rowIdNum;
+    }
 
   });
 }
@@ -55,42 +57,36 @@ let returnedTwoVideoes = [];
 // This get request returns two json objects from the database, then pass their urls to the video tag 
 sendGetRequest("/getTwoVideos")
   .then(function(response) {
-
+    // on success, if response is pick winner, go to winner page
     if (response == 'pick winner') {
-      // pick the winner first, possibly asyn function
       window.location = "winner.html";
     }
-
-    //let result = response;
+    // else reload compare page and show the two videos from response 
     returnedTwoVideoes = response;
     for (let i = 0; i < 2; i++) {
       addVideo(response[i].url, videoElmts[i]);
-
     }
     // load the videos after the names are pasted in! 
     loadTheVideos();
 
   })
   .catch(function(err) {
-    console.log("Receive response failed ", err);
+    console.log("Receive /getTwoVideos response failed ", err);
   });
 
 
 // Next button 
 
-// by default, next button is disable  set .disable in js 
-// once user click on the heart, next button enable
-// sends the prefData to PrefTable
-
+// sends the prefData to PrefTable by /inserPref post request
 let nextButton = document.getElementById("nextButton");
-
 nextButton.addEventListener("click", function() {
   try {
     sendPostRequest("/insertPref", PrefData)
       .then(function(response) {
+        // on sucess , redirect to winner page if receive "pick winner"
         if (response == "pick winner") {
           window.location = "winner.html";
-        } else {
+        } else { // otherwise reload the page to get two new videos
           window.location.reload();
         }
       })

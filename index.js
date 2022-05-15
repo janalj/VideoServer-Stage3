@@ -79,7 +79,7 @@ app.get("/getTwoVideos", async function(req, res) {
     let item2 = await getVideo(element2);
     let videoArray = [item1, item2];
 
-    // 3. send it back to front end
+    // 3. send it back to browser
     res.json(videoArray);
 
   } catch (err) {
@@ -92,26 +92,30 @@ app.post("/insertPref", async function(req, res) {
   try {
     // parse the JSON body to Javascript Object type
     let info = req.body;
-    // create a new object to pass into insertVideo function
+    // create a new object copied from request
     let vidObj = {
       "better": info.better,
       "worse": info.worse
     }
-    // test length
-
+    // show user's choice
+    console.log("User's choice: ",vidObj);
+    
+    // check the current PrefTable size and show it
     let checkTable = await allPrefTable();
     let tableSize = checkTable.length;
-    console.log("tableSize ", tableSize);
+    console.log("There are ", tableSize, " entries in PrefTable");
 
+    // if there's already 15 entries, send back "pick winner"
     if (tableSize == 15) {
+      console.log("Can't Insert! PrefTable is full!");
       res.send("pick winner");
-    } else {
-      //console.log(vidObj);
+    } else { // otherwise insert the new entry and send back "continue"
       await insertVideo(vidObj);
       res.send("conitune");
     }
   } catch (err) {
-    res.send(err);}
+    res.send(err);
+  }
 });
 
 // Page not found
@@ -130,6 +134,7 @@ const listener = app.listen(3000, function() {
 
 /////////////////////////////////////////////////////////////////
 //SQL functions 
+// getting video from VideoTable by the order number, NOT rowIDNUm
 async function getVideo(eleNum) {
   try {
     const sql = 'select * from VideoTable';
@@ -141,6 +146,7 @@ async function getVideo(eleNum) {
   }
 }
 
+// insert an entry to PrefTable
 async function insertVideo(v) {
   try {
     const sql = "insert into PrefTable (better,worse) values (?,?)";
@@ -153,7 +159,6 @@ async function insertVideo(v) {
 }
 
 // // print PrefTable
-// console.log("From sqlWrap.js call");
 allPrefTable();
 
 // allPrefTable returns the entire table on sucess
@@ -171,10 +176,10 @@ async function allPrefTable() {
   }
 }
 
-
+// getting video by RowID number
 async function getUrlByRowID(num) {
   try {
-    const sql = 'select url from VideoTable where rowIdNum = ?';
+    const sql = 'select * from VideoTable where rowIdNum = ?';
     let result = await db.get(sql, [num]);
     console.log(result);
     return result;
