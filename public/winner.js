@@ -15,14 +15,16 @@ reloadButton.addEventListener("click",function () {
 // and send the result back in the HTTP response.
 
 // once winner.html page gets loaded, send the '/getWinner' get request
+
+let winnerNickname = document.getElementById("WinnerNickname");
+
 sendGetRequest("/getWinner")
   .then(
     // on sucess, show the returned winner video
   function(response){
-    // add video nickname to the winner statement
-    let winnerClass = document.getElementById("winnerTitle");
-    let winnerStatement = "The winner is " +response.nickname + ". Game Over!";
-    winnerClass.textContent = winnerStatement;
+    // add video nickname
+    winnerNickname.textContent = response.nickname;
+    console.log(response.nickname);
     // pass the url to load the winner video 
     addVideo(response.url, divElmt);
     loadTheVideos();    

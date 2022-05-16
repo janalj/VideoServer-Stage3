@@ -41,7 +41,7 @@ app.use(express.static("public"));
 
 // if no file specified, return the main page
 app.get("/", (request, response) => {
-  response.sendFile(__dirname + "/public/compare.html");
+  response.sendFile(__dirname + "/public/winner.html");
 });
 
 // Get JSON out of HTTP request body, JSON.parse, and put object into req.body
