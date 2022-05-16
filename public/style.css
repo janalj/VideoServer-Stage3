@@ -59,6 +59,14 @@ h1 {
     color: rgb(30,30,30);
 }
 
+.nickname {
+  color: white;
+  text-align: center;
+  font-family: Inter;
+  font-size: 48px;
+}
+
+
 /* Slightly altered default h2 tag. */
 h2 {
     display: block;

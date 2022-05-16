@@ -22,6 +22,8 @@ nextButtonID.disabled = true;
 
 let iconClass = document.getElementsByClassName("icon");
 
+let nickNameClass = document.getElementsByClassName("nickname");
+
 for (let i = 0; i < 2; i++) {
   resetHearts(); heartButtons[i].addEventListener("click", function() {
     resetHearts();
@@ -29,8 +31,11 @@ for (let i = 0; i < 2; i++) {
     heartButtons[i].classList.remove("unloved");
     iconClass[i].classList.remove("far");
     iconClass[i].classList.add("fas");
+//
+  
     // set better video
     PrefData.better = returnedTwoVideoes[i].rowIdNum;
+    
     // enble the next button 
     nextButtonID.removeAttribute("disabled");
     nextButtonID.classList.remove("disabledButton");
@@ -65,6 +70,7 @@ sendGetRequest("/getTwoVideos")
     returnedTwoVideoes = response;
     for (let i = 0; i < 2; i++) {
       addVideo(response[i].url, videoElmts[i]);
+      nickNameClass[i].textContent = returnedTwoVideoes[i].nickname;
     }
     // load the videos after the names are pasted in! 
     loadTheVideos();
